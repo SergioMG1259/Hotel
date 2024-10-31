@@ -1,0 +1,29 @@
+<mat-card>
+    <mat-card-content>
+        <h2 class="title">{{ data.mode === 'add' ? 'Add Room' : 'Edit Room' }}</h2>
+
+        <div class="flex wrapper">
+            <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput placeholder="Ex. Gym" type="text" [(ngModel)]="this.service.name">
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>Description</mat-label>
+                <input matInput placeholder="New service" type="text" [(ngModel)]="this.service.description">
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>Price</mat-label>
+                <input matInput placeholder="Ex. 15.0" type="number" [(ngModel)]="this.service.price">
+            </mat-form-field>
+        </div>
+
+    </mat-card-content>
+
+    <mat-dialog-actions >
+        <button mat-button (click)="onCancel()">Cancel</button>
+        <button mat-button color="primary" (click)="onSave()">{{ data.mode === 'add' ? 'Add' : 'Save' }}</button>
+    </mat-dialog-actions>
+    
+</mat-card>

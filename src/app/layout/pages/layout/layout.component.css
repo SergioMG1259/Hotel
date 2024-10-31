@@ -1,0 +1,109 @@
+.wrapper {
+    background-color: transparent;
+    width: auto;
+}
+.menu {
+    background-color: var(--primary-color);
+    border-radius: 0px;
+    height: 100vh;
+    position: fixed;
+    width: 215px;
+}
+/*Logo*/
+.side-bar-logo {
+    align-items: center;
+    height: 60px;
+    position: relative;
+    white-space: nowrap;
+    width: 100%;
+}
+.side-bar-logo img {
+    height: 40px;
+    margin-left: 26px;
+    width: 40px;
+}
+.side-bar-company-name {
+    color: var(--primary-text);
+    font-size: 20px;
+    font-weight: 600;
+    margin-left: 12px;
+}
+/*OPTIONS*/
+.side-bar-items {
+    margin-top: 20px;
+    width: 100%;
+    height: calc(100% - 120px);
+    display: flex;
+    flex-direction: column;
+}
+.link {
+    border-radius: 0;
+    color: black;
+    cursor: pointer;
+    width: 100%;
+}
+
+.side-bar-item {
+    margin-top: 15px;
+    width: 100%;
+}
+.side-bar-item:nth-child(1) {
+    margin-top: 0px;
+}
+.side-bar-item a {
+    padding: 0px 23px 0px 23px;
+}
+.side-bar-item a:hover .side-bar-icon{
+    margin-left: 8px;
+}
+.side-bar-active .side-bar-option {
+    background-color: var(--secondary-color);
+    color: var(--text-white);
+}
+.side-bar-option {
+    border-radius: 5px;
+    color: var(--grey);
+    font-size: 18px;
+    line-height: normal;
+    padding: 12px 12px 11px 12px;
+    width: 100%;
+}
+.side-bar-option .side-bar-icon {
+    font-size: 22px;
+    transition: margin-left 0.3s ease;
+}
+.side-bar-item-name {
+    margin-left: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: break-all;
+}
+.aux {
+    margin-top: auto;
+}
+
+/*TOOLBAR*/
+.tool-bar {
+    background-color: var(--primary-color);
+    height: 60px;
+}
+.icon {
+    color: var(--primary-text);
+}
+.spacer {
+    flex: 1 1 auto;
+}
+.name-user {
+    color: var(--primary-text);
+    font-size: 16px;
+}
+
+/*ROUTER*/
+.router-wrapper {
+    padding: 16px;
+    width: 100%;
+}
+
+.exit {
+    color: var(--delete-color);
+}

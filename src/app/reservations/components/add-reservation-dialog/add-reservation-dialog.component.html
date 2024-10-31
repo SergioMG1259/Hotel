@@ -1,0 +1,29 @@
+<mat-card>
+    <mat-card-content>
+        <h2 class="title">Reserve a room</h2>
+
+        <div class="flex wrapper">
+            <mat-form-field class="example-full-width" appearance="outline">
+                <mat-label>Start Date</mat-label>
+                <input matInput [matDatepicker]="startPicker" placeholder="MM/DD/YYYY"
+                [min]="this.minDate" [(ngModel)]="this.startDate" (ngModelChange)="setMinDateForFinalDate()"/>
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+                <mat-datepicker #startPicker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field class="example-full-width" appearance="outline">
+                <mat-label>Final Date</mat-label>
+                <input matInput [matDatepicker]="finalPicker"  placeholder="MM/DD/YYYY" [min]="this.startDateCopy"/>
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="finalPicker"></mat-datepicker-toggle>
+                <mat-datepicker #finalPicker></mat-datepicker>
+              </mat-form-field>
+        </div>    
+    </mat-card-content>
+
+    <mat-dialog-actions >
+        <button mat-button (click)="onCancel()">Cancel</button>
+        <button mat-button color="primary" (click)="onSave()"> Reserve </button>
+    </mat-dialog-actions>
+</mat-card>

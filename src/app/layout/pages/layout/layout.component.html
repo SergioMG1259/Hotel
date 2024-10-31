@@ -1,0 +1,70 @@
+
+<mat-drawer-container class="wrapper">
+    <mat-drawer #drawer mode="side" class="menu" opened="true">
+        <div class="flex side-bar-logo">
+            <img src="https://images.vexels.com/content/224241/preview/programming-diple-logo-4937e7.png" alt="Hotel logo">
+            <p class="side-bar-company-name side-bar-nav-item">Web Hotel</p>
+        </div>
+        <ul class="side-bar-items">
+            <li class="side-bar-item">
+                <a class="flex link" [routerLink]="['/rooms']" routerLinkActive="side-bar-active">
+                    <div class="side-bar-option flex">
+                        <mat-icon class="side-bar-icon">hotel</mat-icon>
+                        <p class="side-bar-item-name side-bar-nav-item">Rooms</p>
+                    </div>
+                </a>
+            </li>
+
+            @if (this.rol == 'admin') {
+                <li class="side-bar-item">
+                    <a class="flex link" [routerLink]="['/services']" routerLinkActive="side-bar-active">
+                        <div class="side-bar-option flex">
+                            <mat-icon class="side-bar-icon">room_service</mat-icon>
+                            <p class="side-bar-item-name side-bar-nav-item">Services</p>
+                        </div>
+                    </a>
+                </li>
+            }
+
+            <li class="side-bar-item">
+                <a class="flex link" [routerLink]="['/reservations']" routerLinkActive="side-bar-active">
+                    <div class="side-bar-option flex">
+                        <mat-icon class="side-bar-icon">event</mat-icon>
+                        <p class="side-bar-item-name side-bar-nav-item">Reservations</p>
+                    </div>
+                </a>
+            </li>
+            
+            <li class="side-bar-item">
+                <a class="flex link" [routerLink]="['/payments']" routerLinkActive="side-bar-active">
+                    <div class="side-bar-option flex">
+                        <mat-icon class="side-bar-icon">payments</mat-icon>
+                        <p class="side-bar-item-name side-bar-nav-item">Payments</p>
+                    </div>
+                </a>
+            </li>
+            
+            <li class="side-bar-item aux">
+                <a class="flex link" [routerLink]="['/login']" routerLinkActive="side-bar-active">
+                    <div class="side-bar-option flex exit">
+                        <mat-icon class="side-bar-icon">logout</mat-icon>
+                        <p class="side-bar-item-name side-bar-nav-item">Exit</p>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </mat-drawer>
+    <mat-drawer-content>
+        <mat-toolbar class="tool-bar">
+            <button mat-icon-button (click)="drawer.toggle()" aria-label="Toggle sidenav" aria-label="icon-button with menu icon">
+              <mat-icon class="icon">menu</mat-icon>
+            </button>
+            <span class="spacer"></span>
+            <span class="name-user">Welcome {{this.rol}}</span>
+        </mat-toolbar>
+
+        <div class="router-wrapper">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-drawer-content>
+  </mat-drawer-container>

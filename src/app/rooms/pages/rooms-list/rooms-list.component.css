@@ -1,0 +1,31 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+.filter {
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.field {
+    flex: 1;
+}
+.button {
+    background-color: var(--secondary-color) !important;
+    border-radius: 5px;
+    box-shadow: none;
+    color: var(--text-white);
+    height: 56px;
+    width: 56px;
+}
+
+.button-add-container {
+    text-align: end;
+}
+
+.edit {
+    color: var(--grey);
+}
+.delete {
+    color: var(--delete-color);
+}

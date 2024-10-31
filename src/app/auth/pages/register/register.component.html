@@ -1,0 +1,103 @@
+<div class="flex wrapper">
+    <section class="flex left">
+        <mat-card appearance="outlined" class="form-wrapper">
+            <mat-card-header>
+              <mat-card-title>Register</mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content class="fields-wrapper">
+                <div class="flex container">
+                    <div class="flex row">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Names</mat-label>
+                            <input matInput placeholder="Names" type="text">
+                        </mat-form-field>
+        
+                        <mat-form-field appearance="outline">
+                            <mat-label>Last Names</mat-label>
+                            <input matInput placeholder="Last Names" type="text">
+                        </mat-form-field>
+                    </div>
+    
+                    <div class="flex row">
+                        <mat-form-field appearance="outline">
+                            <mat-label>DNI</mat-label>
+                            <input matInput placeholder="" type="text">
+                        </mat-form-field>
+    
+                        <mat-form-field appearance="outline">
+                            <mat-label>Nationality</mat-label>
+                            <mat-select>
+                              @for (country of nationalities; track country) {
+                                <mat-option [value]="country.country">{{country.country}}</mat-option>
+                              }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+    
+                    <div class="flex row">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Birthday</mat-label>
+                            <input matInput [matDatepicker]="picker" placeholder="MM/DD/YYYY">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+    
+                          <mat-form-field appearance="outline">
+                            <mat-label>Cellphone</mat-label>
+                            <input matInput placeholder="981236527" type="text">
+                        </mat-form-field>
+                    </div>
+    
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input matInput placeholder="example@example.com" type="email">
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline">
+                        <mat-label>Password</mat-label>
+                        <input matInput [type]="hide() ? 'password' : 'text'" />
+                        <button
+                          mat-icon-button
+                          matSuffix
+                          (click)="clickEvent($event)"
+                          [attr.aria-label]="'Hide password'"
+                          [attr.aria-pressed]="hide()"
+                        >
+                          <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline">
+                        <mat-label>Role</mat-label>
+                        <mat-select>
+                          @for (rol of roles; track rol) {
+                            <mat-option [value]="rol.value">{{rol.value}}</mat-option>
+                          }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+            </mat-card-content>
+
+            <mat-card-actions>
+                <button mat-flat-button class="my-button">Register</button>
+            </mat-card-actions>
+
+            <mat-card-actions>
+                <p class="to-login">Have an account? <a href="/login">Log in here.</a></p>
+            </mat-card-actions>
+        </mat-card>
+    </section>
+
+    <section class="flex right">
+        <div class="text-content">
+            <h1 class="title">Create Your Account</h1>
+            <p class="slogan">Become part of our community—register now!</p>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#dfeaf4" fill-opacity="1" d="M0,224L48,192C96,160,192,96,288,69.3C384,43,480,53,576,80C672,107,768,149,864,138.7C960,128,1056,64,1152,42.7C1248,21,1344,43,1392,53.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+        </svg>
+    </section>
+
+</div>

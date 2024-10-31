@@ -1,0 +1,14 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+.button-add-container {
+    text-align: end;
+}
+.edit {
+    color: var(--grey);
+}
+.delete {
+    color: var(--delete-color);
+}

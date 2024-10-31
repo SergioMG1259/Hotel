@@ -1,0 +1,15 @@
+.title {
+    color: var(--primary-text);
+    font-size: 20px;
+}
+.description {
+    color: var(--grey);
+    font-size: 16px;
+    margin-bottom: 16px;
+    margin-top: 16px;
+}
+.wrapper {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}

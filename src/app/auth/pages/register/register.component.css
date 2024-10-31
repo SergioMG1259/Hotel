@@ -1,0 +1,65 @@
+.wrapper {
+    width: 100%;
+}
+.right {
+    background: #396afc;
+    background: -webkit-linear-gradient(to right, #2948ff, #396afc);
+    background: linear-gradient(to right, #2948ff, #396afc);
+
+    height: 100vh;
+    width: 50%;
+
+    position: relative;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.right svg {
+    bottom: 0px;
+    position: absolute;
+}
+.title {
+    color:  var(--text-white);
+    font-size: 46px;
+}
+.slogan {
+    color: var(--text-white);
+    margin-top: 10px;
+    font-size: 24px;
+}
+.left {
+    align-items: center;
+    flex: 1;
+    height: 100vh;
+    justify-content: center;
+}
+.form-wrapper {
+    background-color: var(--primary-color);
+    height: fit-content;
+    width: 420px; 
+}
+.fields-wrapper {
+    margin-top: 16px;
+}
+.container {
+    flex-direction: column;
+    row-gap: 10px;
+}
+.row {
+    column-gap: 10px;
+}
+mat-form-field {
+    width: 100%;
+}
+.my-button {
+    border-radius: 5px;
+    width: 100%;
+}
+.to-login {
+    text-align: center;
+    width: 100%;
+}
+.to-login a {
+    color: var(--secondary-color);
+}

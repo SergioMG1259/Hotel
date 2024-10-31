@@ -1,1 +1,84 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import '@angular/cdk/overlay-prebuilt.css';
+* {
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+    font-style: normal;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+html, body { height: 100%; }
+body { background-color: var(--background-color); margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.flex {
+    display: flex;
+}
+
+:root {
+    --background-color: rgb(223, 234, 244);
+    --text-white: rgb(233, 233, 233);
+    --primary-text: #2f2f2f;
+    --primary-color: rgb(246, 246, 246);
+    --secondary-color: rgb(38, 116, 243);
+    --delete-color: #ed2061;
+    --grey: #6a6a6a;
+}
+.mat-mdc-card{
+    background-color: var(--primary-color) !important;
+    border-radius: 5px !important;
+}
+button {
+    border-radius: 5px !important;
+}
+.mat-mdc-unelevated-button:not(:disabled) {
+    background-color: var(--secondary-color) !important;
+    border-radius: 5px;
+}
+.mat-mdc-card-actions {
+    padding: 8px 16px !important;
+}
+.mat-mdc-form-field-subscript-wrapper{
+    display: none;
+}
+
+/*TABLE*/
+.mat-mdc-table {
+    background-color: var(--primary-color) !important;
+    border-radius: 5px !important;
+}
+.mat-mdc-row .mat-mdc-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+}
+.mat-mdc-header-cell {
+    background-color: var(--secondary-color) !important;
+    border-bottom-color: var(--primary-color) !important;
+    color: var(--text-white) !important;
+}
+.mat-mdc-header-cell:nth-child(1) {
+    border-radius: 5px 0px 0px 0px;
+}
+.mat-mdc-header-cell:last-child {
+    border-radius: 0px 5px 0px 0px;
+}
+.mat-mdc-row {
+    color: var(--primary-text);
+}
+.mat-mdc-paginator {
+    background-color: var(--primary-color) !important;
+    border-radius: 5px !important;
+}
+.table-wrapper {
+    border-radius: 5px;
+}
+
+.mat-mdc-dialog-surface {
+    /* background-color: var(--grey) !important;
+    padding: 10px !important; */
+    background-color: var(--primary-color) !important;
+    border-radius: 5px !important;
+}

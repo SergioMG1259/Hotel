@@ -1,0 +1,52 @@
+<div class="flex wrapper">
+    <section class="flex left">
+        <div class="text-content">
+            <h1 class="title">Welcome</h1>
+            <p class="slogan">Ready to dive back in? Sign in to your account.</p>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#dfeaf4" fill-opacity="1" d="M0,224L48,192C96,160,192,96,288,69.3C384,43,480,53,576,80C672,107,768,149,864,138.7C960,128,1056,64,1152,42.7C1248,21,1344,43,1392,53.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+        </svg>
+    </section>
+    <section class="flex right">
+        <mat-card appearance="outlined" class="form-wrapper">
+            <mat-card-header>
+              <mat-card-title>Login</mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content class="fields-wrapper">
+                <div class="flex container">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input matInput placeholder="example@example.com" type="email">
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline">
+                        <mat-label>Password</mat-label>
+                        <input matInput [type]="hide() ? 'password' : 'text'" />
+                        <button
+                          mat-icon-button
+                          matSuffix
+                          (click)="clickEvent($event)"
+                          [attr.aria-label]="'Hide password'"
+                          [attr.aria-pressed]="hide()"
+                        >
+                          <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                      </mat-form-field>
+                </div>
+
+            </mat-card-content>
+
+            <mat-card-actions>
+                <button mat-flat-button class="my-button" (click)="this.login()">Login</button>
+            </mat-card-actions>
+
+            <mat-card-actions>
+                <p class="to-register">Not a user? <a href="/register">Register now</a></p>
+            </mat-card-actions>
+
+        </mat-card>
+
+    </section>
+</div>

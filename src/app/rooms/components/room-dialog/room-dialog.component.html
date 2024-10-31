@@ -1,0 +1,47 @@
+<mat-card>
+    <mat-card-content>
+        <h2 class="title">{{ data.mode === 'add' ? 'Add Room' : 'Edit Room' }}</h2>
+
+        <div class="flex wrapper">
+            <mat-form-field appearance="outline">
+                <mat-label>Room number</mat-label>
+                <input matInput placeholder="Ex. 12A" type="text" [(ngModel)]="this.room.roomNumber">
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>Type</mat-label>
+                <mat-select [(ngModel)]="this.room.roomType">
+                    <mat-option value="SINGLE">Single</mat-option>
+                    <mat-option value="DOUBLE">Double</mat-option>
+                    <mat-option value="SUITE">Suit</mat-option>
+                </mat-select>
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>Capacity</mat-label>
+                <input matInput placeholder="Ex. 2" type="number" [(ngModel)]="this.room.capacity">
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>Price</mat-label>
+                <input matInput placeholder="Ex. 150" type="number" [(ngModel)]="this.room.pricePerNight">
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>Status</mat-label>
+                <mat-select [(ngModel)]="this.room.roomStatus">
+                    <mat-option value="AVAILABLE">Available</mat-option>
+                    <mat-option value="OCCUPIED">Occupied</mat-option>
+                    <mat-option value="OUT_OF_ORDER">Out of order</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+    </mat-card-content>
+
+    <mat-dialog-actions >
+        <button mat-button (click)="onCancel()">Cancel</button>
+        <button mat-button color="primary" (click)="onSave()">{{ data.mode === 'add' ? 'Add' : 'Save' }}</button>
+    </mat-dialog-actions>
+    
+</mat-card>
