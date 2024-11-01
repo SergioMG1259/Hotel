@@ -4,5 +4,6 @@ import { layoutRoutes } from './layout/layout.routes';
 
 export const routes: Routes = [
     ...authRoutes,
-    ...layoutRoutes
+    ...layoutRoutes,
+    { path: '**', redirectTo: '/login' }
 ];

@@ -22,5 +22,7 @@ export const authRoutes: Routes = [
     {
       path: 'register', // Ruta hija para registro
       loadComponent: () => import('./pages/register/register.component').then(m => m.RegisterComponent),     
-    }
+    },
+    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    
 ];
