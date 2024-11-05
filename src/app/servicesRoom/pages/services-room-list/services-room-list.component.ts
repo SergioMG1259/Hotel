@@ -15,6 +15,8 @@ import { Subscription } from 'rxjs';
 import { ServiceRoomDialogComponent } from '../../components/service-room-dialog/service-room-dialog.component';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../auth/services/auth.service';
+import { ServicesApiService } from '../../../services/services-api.service';
+import { ServiceRoomAddDialogComponent } from '../../components/service-room-add-dialog/service-room-add-dialog.component';
 
 @Component({
   selector: 'app-services-room-list',
@@ -28,12 +30,18 @@ export class ServicesRoomListComponent {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
   displayedColumns: string[] = ['name', 'description', 'price', 'actions']
-  dataSource = new MatTableDataSource<ServiceReservation>(ELEMENT_DATA)
+  dataSource = new MatTableDataSource<ServiceReservation>([]);
 
   dialogClosedSub!: Subscription
   serviceRoomDialogSub!: Subscription
+  serviceRoomAddDialogSub!: Subscription
+  allServiceSub!: Subscription
+  deleteServiceSub!: Subscription
 
-  constructor(private dialog: MatDialog, public authService: AuthService) {}
+  constructor(private dialog: MatDialog, public authService: AuthService, 
+    private serviceReservationService:ServicesApiService) {
+
+  }
 
   openDeleteDialog(index: number, type: string): void {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
@@ -42,37 +50,33 @@ export class ServicesRoomListComponent {
     
     this.dialogClosedSub = dialogRef.afterClosed().subscribe(result => {
       if (result?.confirm) {
-        this.deleteServiceRoom(result.index)
-      } else {
-        console.log('Deletion canceled')
+        this.deleteServiceSub = this.serviceReservationService.deleteService(index).subscribe(result => {
+          this.getAllServices()
+        })
       }
     })
   }
 
-  deleteServiceRoom(index: number): void {
-    console.log(`Deleting service at index ${index}...`)
-    // Simula la eliminación llamando a un endpoint (sólo un console log en este caso)
-    console.log('Updated services:', index)
-  }
-
-  openServiceRoomDialog(mode: 'add' | 'edit', serviceRoomData?: ServiceReservation): void {
+  openServiceRoomDialog(serviceRoomData: ServiceReservation): void {
     const dialogRef = this.dialog.open(ServiceRoomDialogComponent, {
-      data: { mode, serviceRoomData }  // Se pasa el modo y los datos de la habitación (solo en modo 'edit')
+      data: { serviceRoomData } 
     });
   
     this.serviceRoomDialogSub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        if (mode === 'add') {
-          this.addService(result.service);  // Función para añadir una habitación
-        } else if (mode === 'edit') {
-          this.updateService(result.service);  // Función para actualizar una habitación
-        }
+          this.getAllServices()
       }
     });
   }
 
-  addService(service : any) {
-    console.log(service)
+  openServiceRoomAddDialog(){
+    const dialogRef = this.dialog.open(ServiceRoomAddDialogComponent);
+  
+    this.serviceRoomAddDialogSub = dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getAllServices()
+      }
+    });
   }
 
   updateService(service : any) {
@@ -86,16 +90,31 @@ export class ServicesRoomListComponent {
   ngOnDestroy(): void {
     if (this.dialogClosedSub)
       this.dialogClosedSub.unsubscribe()
+
     if (this.serviceRoomDialogSub)
       this.serviceRoomDialogSub.unsubscribe()
+  
+    if(this.allServiceSub)
+      this.allServiceSub.unsubscribe()
+    
+    if(this.serviceRoomAddDialogSub)
+      this.serviceRoomAddDialogSub.unsubscribe()
+    
+    if(this.deleteServiceSub)
+      this.deleteServiceSub.unsubscribe()
+  }
+
+  ngOnInit(): void {
+    this.getAllServices()
+  }
+
+  getAllServices(){
+    if(this.allServiceSub)
+      this.allServiceSub.unsubscribe()
+
+    this.allServiceSub = this.serviceReservationService.getAllServices().subscribe((result) => {
+      this.dataSource.data = result
+    })
   }
 
 }
-
-const ELEMENT_DATA: ServiceReservation[] = [
-  {id: 1, name: 'servicio 1', description: 'descripción larga aqui 1', price: 15.2},
-  {id: 2, name: 'servicio 2', description: 'descripción larga aqui 2', price: 12.3},
-  {id: 3, name: 'servicio 3', description: 'descripción larga aqui 3', price: 13.7},
-  {id: 4, name: 'servicio 4', description: 'descripción larga aqui 4', price: 11.1},
-  {id: 5, name: 'servicio 5', description: 'descripción larga aqui 5', price: 17.5},
-]

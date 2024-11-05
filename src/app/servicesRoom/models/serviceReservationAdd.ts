@@ -1,5 +1,4 @@
-export interface ServiceReservation {
-    id: number,
+export interface ServiceReservationAdd {
     nombre: string,
     descripcion: string,
     precio: number

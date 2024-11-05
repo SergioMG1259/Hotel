@@ -37,7 +37,7 @@ export class PayDetailsDialogComponent {
   }
 
   getTotalPrice(): number {
-    return ELEMENT_DATA.reduce((total, element) => total + element.price, 0);
+    return ELEMENT_DATA.reduce((total, element) => total + element.precio, 0)
   }
 
   ngAfterViewInit() {
@@ -46,7 +46,7 @@ export class PayDetailsDialogComponent {
 }
 
 const ELEMENT_DATA: ServiceReservation[] = [
-  {id: 1, name: 'servicio 1', description: 'descripción larga aqui 1', price: 15.2},
-  {id: 2, name: 'servicio 2', description: 'descripción larga aqui 2', price: 12.3},
-  {id: 3, name: 'servicio 3', description: 'descripción larga aqui 3', price: 13.7}
+  // {id: 1, name: 'servicio 1', description: 'descripción larga aqui 1', price: 15.2},
+  // {id: 2, name: 'servicio 2', description: 'descripción larga aqui 2', price: 12.3},
+  // {id: 3, name: 'servicio 3', description: 'descripción larga aqui 3', price: 13.7}
 ]

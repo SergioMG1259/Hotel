@@ -1,5 +1,4 @@
-export interface Room {
-    id : number,
+export interface AddRoom {
     numerohabitacion : string,
     tipo_habitacion : string,
     capacidad : number,

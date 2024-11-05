@@ -1,16 +1,16 @@
 <mat-card>
     <mat-card-content>
-        <h2 class="title">Edit Room</h2>
+        <h2 class="title">Add Room</h2>
 
         <div class="flex wrapper">
             <mat-form-field appearance="outline">
                 <mat-label>Room number</mat-label>
-                <input matInput placeholder="Ex. 12A" type="text" [(ngModel)]="this.room.numerohabitacion" maxlength="4">
+                <input matInput placeholder="Ex. 12A" type="text" [(ngModel)]="this.roomNumber" maxlength="4">
             </mat-form-field>
     
             <mat-form-field appearance="outline">
                 <mat-label>Type</mat-label>
-                <mat-select [(ngModel)]="this.room.tipo_habitacion">
+                <mat-select [(ngModel)]="this.type">
                     <mat-option value="INDIVIDUAL">Single</mat-option>
                     <mat-option value="DOBLE">Double</mat-option>
                     <mat-option value="TRIPLE">Triple</mat-option>
@@ -20,17 +20,17 @@
     
             <mat-form-field appearance="outline">
                 <mat-label>Capacity</mat-label>
-                <input matInput placeholder="Ex. 2" type="number" [(ngModel)]="this.room.capacidad">
+                <input matInput placeholder="Ex. 2" type="number" [(ngModel)]="capacity">
             </mat-form-field>
     
             <mat-form-field appearance="outline">
                 <mat-label>Price per night</mat-label>
-                <input matInput placeholder="Ex. 150" type="number" [(ngModel)]="this.room.preciopornoche">
+                <input matInput placeholder="Ex. 150" type="number" [(ngModel)]="price">
             </mat-form-field>
     
             <mat-form-field appearance="outline">
                 <mat-label>Status</mat-label>
-                <mat-select [(ngModel)]="this.room.estado_habitacion">
+                <mat-select [(ngModel)]="this.status">
                     <mat-option value="DISPONIBLE">Available</mat-option>
                     <mat-option value="OCUPADO">Occupied</mat-option>
                     <mat-option value="MANTENIMIENTO">Out of order</mat-option>
@@ -42,7 +42,8 @@
 
     <mat-dialog-actions >
         <button mat-button (click)="onCancel()">Cancel</button>
-        <button mat-button color="primary" (click)="onSave()" [disabled]="this.room.numerohabitacion == ''">Save</button>
+        <button mat-button color="primary" (click)="onSave()" [disabled]="this.roomNumber == ''">Add</button>
     </mat-dialog-actions>
     
 </mat-card>
+

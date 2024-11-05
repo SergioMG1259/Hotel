@@ -1,5 +1,5 @@
 import { Component, OnDestroy, ViewChild } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,26 +15,42 @@ import { Room } from '../../models/Room';
 import { RoomDialogComponent } from '../../components/room-dialog/room-dialog.component';
 import { AuthService } from '../../../auth/services/auth.service';
 import { AddReservationDialogComponent } from '../../../reservations/components/add-reservation-dialog/add-reservation-dialog.component';
+import { RoomsApiService } from '../../../services/rooms-api.service';
+import { CommonModule } from '@angular/common';
+import { RoomAddDialogComponent } from '../../components/room-add-dialog/room-add-dialog.component';
 
 @Component({
   selector: 'app-rooms-list',
   standalone: true,
   imports: [MatCardModule, MatButtonModule, MatFormFieldModule, MatInputModule, 
-    MatIconModule, MatSelectModule, ReactiveFormsModule,MatTableModule, MatPaginatorModule, MatDialogModule],
+    MatIconModule, MatSelectModule, ReactiveFormsModule,MatTableModule, MatPaginatorModule, MatDialogModule, 
+    CommonModule, FormsModule],
   templateUrl: './rooms-list.component.html',
   styleUrl: './rooms-list.component.css'
 })
 export class RoomsListComponent implements OnDestroy {
 
+  capacity:number|null = null
+  status:string|null = "DEFAULT"
+  type:string|null = "DEFAULT"
+  minPrice:number|null = null
+  maxPrice:number|null = null
+
   @ViewChild(MatPaginator) paginator!: MatPaginator
   displayedColumns: string[] = ['roomNumber', 'roomType', 'capacity', 'pricePerNight', 'roomStatus', 'actions']
-  dataSource = new MatTableDataSource<Room>(ELEMENT_DATA)
+  rooms:Room[] = []
+  
+  dataSource = new MatTableDataSource<Room>([]);
 
   dialogClosedSub!: Subscription
-  roomDialogSub!: Subscription
+  roomEditDialogSub!: Subscription
+  roomAddDialogSub!: Subscription
   addReservationDialogSub!: Subscription
 
-  constructor(private dialog: MatDialog, public authService: AuthService) {}
+  roomSubscription: Subscription | null = null;
+  deleteRoomSub!: Subscription
+
+  constructor(private dialog: MatDialog, public authService: AuthService, private roomService:RoomsApiService) {}
 
   openDeleteDialog(index: number, type: string): void {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
@@ -43,25 +59,32 @@ export class RoomsListComponent implements OnDestroy {
     
     this.dialogClosedSub = dialogRef.afterClosed().subscribe(result => {
       if (result?.confirm) {
-        this.deleteRoom(result.index)
-      } else {
-        console.log('Deletion canceled')
+        this.deleteRoomSub = this.roomService.deleteRoom(index).subscribe(result => {
+          this.applyFilters()
+        })
       }
     })
   }
 
-  openRoomDialog(mode: 'add' | 'edit', roomData?: Room): void {
+  openEditRoomDialog(roomData: Room): void {
     const dialogRef = this.dialog.open(RoomDialogComponent, {
-      data: { mode, roomData }  // Se pasa el modo y los datos de la habitación (solo en modo 'edit')
+      data: { roomData }  // Se pasa el modo y los datos de la habitación (solo en modo 'edit')
     });
-  
-    this.roomDialogSub = dialogRef.afterClosed().subscribe(result => {
+
+    this.roomEditDialogSub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        if (mode === 'add') {
-          this.addRoom(result.room);  // Función para añadir una habitación
-        } else if (mode === 'edit') {
-          this.updateRoom(result.room);  // Función para actualizar una habitación
-        }
+        this.applyFilters()
+          // this.updateRoom(result.room);
+      }
+    });
+  }
+
+  openAddRoomDialog(): void {
+    const dialogRef = this.dialog.open(RoomAddDialogComponent);
+    this.roomAddDialogSub = dialogRef.afterClosed().subscribe(result => {
+      if (result && result.added == true) {
+        this.applyFilters()
+          // this.addRoom(result.room);
       }
     });
   }
@@ -100,29 +123,45 @@ export class RoomsListComponent implements OnDestroy {
   ngOnDestroy(): void {
     if (this.dialogClosedSub)
       this.dialogClosedSub.unsubscribe()
-    if (this.roomDialogSub)
-      this.roomDialogSub.unsubscribe()
+
+    if (this.roomEditDialogSub)
+      this.roomEditDialogSub.unsubscribe()
+
     if (this.addReservationDialogSub)
       this.addReservationDialogSub.unsubscribe()
+
+    if (this.roomSubscription)
+      this.roomSubscription.unsubscribe()
+
+    if(this.roomAddDialogSub)
+      this.roomAddDialogSub.unsubscribe()
+
+    if(this.deleteRoomSub)
+      this.deleteRoomSub.unsubscribe()
+  }
+
+  ngOnInit(): void {
+    this.applyFilters()
+  }
+
+  applyFilters() {
+    
+    if (this.roomSubscription) {
+      this.roomSubscription.unsubscribe();
+    }
+
+    if(this.status == 'DEFAULT')this.status = null
+    if(this.type == 'DEFAULT')this.type = null
+
+   this.roomSubscription = this.roomService.getFilteredRooms(this.capacity, this.status, this.type, this.minPrice, this.maxPrice)
+      .subscribe(
+        (rooms) => {
+          this.rooms = rooms
+          this.dataSource.data = this.rooms
+        },
+        (error) => {
+          console.error('Error fetching filtered rooms:', error);
+        }
+      );
   }
 }
-
-const ELEMENT_DATA: Room[] = [
-  {id: 1, roomNumber: '1A', roomType: 'SINGLE', capacity: 1, pricePerNight: 20.2, roomStatus: 'AVAILABLE'},
-  {id: 2, roomNumber: '2A', roomType: 'SINGLE', capacity: 1, pricePerNight: 30.2, roomStatus: 'AVAILABLE'},
-  {id: 3, roomNumber: '3A', roomType: 'SINGLE', capacity: 1, pricePerNight: 40.2, roomStatus: 'AVAILABLE'},
-  {id: 4, roomNumber: '4A', roomType: 'DOUBLE', capacity: 2, pricePerNight: 20.1, roomStatus: 'AVAILABLE'},
-  {id: 5, roomNumber: '5A', roomType: 'SUITE', capacity: 3, pricePerNight: 20.0, roomStatus: 'AVAILABLE'},
-  {id: 6, roomNumber: '6A', roomType: 'SINGLE', capacity: 1, pricePerNight: 34.2, roomStatus: 'AVAILABLE'},
-  {id: 7, roomNumber: '7A', roomType: 'DOUBLE', capacity: 2, pricePerNight: 21.2, roomStatus: 'AVAILABLE'},
-  {id: 8, roomNumber: '8A', roomType: 'SINGLE', capacity: 1, pricePerNight: 123.2, roomStatus: 'AVAILABLE'},
-  {id: 9, roomNumber: '9A', roomType: 'SUITE', capacity: 2, pricePerNight: 29.2, roomStatus: 'AVAILABLE'},
-  {id: 10, roomNumber: '10A', roomType: 'DOUBLE', capacity: 2, pricePerNight: 76.2, roomStatus: 'AVAILABLE'},
-  {id: 11, roomNumber: '11A', roomType: 'SINGLE', capacity: 1, pricePerNight: 42.2, roomStatus: 'AVAILABLE'},
-  {id: 12, roomNumber: '12A', roomType: 'SUITE', capacity: 1, pricePerNight: 102.2, roomStatus: 'AVAILABLE'},
-  {id: 13, roomNumber: '13A', roomType: 'SUITE', capacity: 1, pricePerNight: 220.2, roomStatus: 'AVAILABLE'},
-  {id: 14, roomNumber: '14A', roomType: 'SINGLE', capacity: 1, pricePerNight: 120.2, roomStatus: 'AVAILABLE'},
-  {id: 15, roomNumber: '15A', roomType: 'DOUBLE', capacity: 2, pricePerNight: 320.2, roomStatus: 'AVAILABLE'},
-  {id: 16, roomNumber: '16A', roomType: 'SINGLE', capacity: 1, pricePerNight: 120.2, roomStatus: 'AVAILABLE'},
-  {id: 17, roomNumber: '17A', roomType: 'SUITE', capacity: 4, pricePerNight: 320.2, roomStatus: 'AVAILABLE'}
-];

@@ -8,6 +8,8 @@ import { Room } from '../../models/Room';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
+import { RoomsApiService } from '../../../services/rooms-api.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-room-dialog',
@@ -19,23 +21,29 @@ import { FormsModule } from '@angular/forms';
 })
 export class RoomDialogComponent {
   
-  room:any = {}
-
+  room!:Room
+  editRoomSub!: Subscription
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { mode: 'add' | 'edit', roomData?: Room },
-    private dialogRef: MatDialogRef<RoomDialogComponent>
+    @Inject(MAT_DIALOG_DATA) public data: { roomData?: Room },
+    private dialogRef: MatDialogRef<RoomDialogComponent>, private roomService:RoomsApiService
   ) {
-    if (data.mode === 'edit' && data.roomData) {
+    if (data.roomData) {
       this.room = { ...data.roomData }  // Inicializar con los datos para edición
-      console.log(this.room)
-    }
+    } 
   }
 
   onSave(): void {
-    this.dialogRef.close({room : this.room});  // Devuelve los datos de la habitación
+    this.editRoomSub = this.roomService.updateRoom(this.room.id,this.room).subscribe(resul => {
+      this.dialogRef.close({room : this.room});  // Devuelve los datos de la habitación
+    })
   }
 
   onCancel(): void {
     this.dialogRef.close();  // Cierra el diálogo sin cambios
+  }
+
+  ngOnDestroy(): void {
+    if (this.editRoomSub)
+      this.editRoomSub.unsubscribe()
   }
 }

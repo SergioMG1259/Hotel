@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class AuthService {
 
   private _isLoggedIn = false;
-  private _userRole: string | null = 'customer';
+  private _userRole: string | null = 'admin';
 
   constructor() { }
 

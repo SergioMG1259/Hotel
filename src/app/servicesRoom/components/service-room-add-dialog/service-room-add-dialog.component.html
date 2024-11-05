@@ -1,21 +1,21 @@
 <mat-card>
     <mat-card-content>
-        <h2 class="title">Edit Service</h2>
+        <h2 class="title">Add Service</h2>
 
         <div class="flex wrapper">
             <mat-form-field appearance="outline">
                 <mat-label>Name</mat-label>
-                <input matInput placeholder="Ex. Gym" type="text" [(ngModel)]="this.service.nombre">
+                <input matInput placeholder="Ex. Gym" type="text" [(ngModel)]="this.name">
             </mat-form-field>
     
             <mat-form-field appearance="outline" class="text-area">
                 <mat-label>Description</mat-label>
-                <textarea matInput placeholder="New service" type="text" [(ngModel)]="this.service.descripcion"></textarea>
+                <textarea matInput placeholder="New service" type="text" [(ngModel)]="this.descripcion"></textarea>
             </mat-form-field>
     
             <mat-form-field appearance="outline">
                 <mat-label>Price</mat-label>
-                <input matInput placeholder="Ex. 15.0" type="number" [(ngModel)]="this.service.precio">
+                <input matInput placeholder="Ex. 15.0" type="number" [(ngModel)]="this.price">
             </mat-form-field>
         </div>
 
@@ -23,7 +23,8 @@
 
     <mat-dialog-actions >
         <button mat-button (click)="onCancel()">Cancel</button>
-        <button mat-button color="primary" (click)="onSave()">Save</button>
+        <button mat-button color="primary" (click)="onSave()">Add</button>
     </mat-dialog-actions>
     
 </mat-card>
+
