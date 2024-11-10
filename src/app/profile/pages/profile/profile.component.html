@@ -1,0 +1,114 @@
+<mat-card appearance="outlined" class="form-wrapper">
+    <mat-card-header>
+      <mat-card-title>Edit profile</mat-card-title>
+    </mat-card-header>
+
+    <mat-tab-group class="tab">
+        <mat-tab label="Details">
+            <mat-card-content class="fields-wrapper">
+                <div class="flex container">
+                    <div class="flex row">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Names</mat-label>
+                            <input matInput placeholder="Names" type="text" [(ngModel)]="this.customer.nombre">
+                        </mat-form-field>
+        
+                        <mat-form-field appearance="outline">
+                            <mat-label>Last Names</mat-label>
+                            <input matInput placeholder="Last Names" type="text" [(ngModel)]="this.customer.apellido">
+                        </mat-form-field>
+                    </div>
+                
+
+                    <div class="flex row">
+                        <mat-form-field appearance="outline">
+                            <mat-label>DNI</mat-label>
+                            <input matInput placeholder="" type="text" [(ngModel)]="this.customer.dni_ce" maxlength="8">
+                        </mat-form-field>
+        
+                        <mat-form-field appearance="outline">
+                            <mat-label>Nationality</mat-label>
+                            <mat-select [(ngModel)]="this.customer.nacionalidad">
+                            @for (country of nationalities; track country) {
+                                <mat-option [value]="country.country">{{country.country}}</mat-option>
+                            }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="flex row">
+                        <mat-form-field appearance="outline" class="field">
+                            <mat-label>Birthday</mat-label>
+                            <input matInput [matDatepicker]="picker" placeholder="DD/MM/YYYY" 
+                                [(ngModel)]="this.customer.fecha_de_nacimiento">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+        
+                        <mat-form-field appearance="outline">
+                            <mat-label>Cellphone</mat-label>
+                            <input matInput placeholder="981236527" type="text" [(ngModel)]="this.customer.telefono" maxlength="9">
+                        </mat-form-field>
+                    </div>
+
+                    <mat-form-field appearance="outline" class="field-email">
+                        <mat-label>Email</mat-label>
+                        <input matInput placeholder="example@example.com" type="email" [(ngModel)]="this.customer.email">
+                    </mat-form-field>
+
+                    <div>
+                        <button mat-flat-button class="my-button" [disabled]="hasChanges()" (click)="this.editClient()">Edit</button>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-tab>
+
+        <mat-tab label="Change password">
+            <mat-card-content class="fields-wrapper">
+
+                <div class="flex container">
+                    <mat-form-field appearance="outline" class="field">
+                        <mat-label>Password</mat-label>
+                        <input matInput [type]="hidePassword() ? 'password' : 'text'" [(ngModel)]="this.password"/>
+                        <button
+                          mat-icon-button
+                          matSuffix
+                          (click)="clickEventPassword($event)"
+                          [attr.aria-label]="'Hide password'"
+                          [attr.aria-pressed]="hidePassword()"
+                        >
+                          <mat-icon>{{hidePassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline" class="field">
+                        <mat-label>New password</mat-label>
+                        <input matInput [type]="hideNewPassword() ? 'password' : 'text'" [(ngModel)]="this.newPassword"/>
+                        <button
+                          mat-icon-button
+                          matSuffix
+                          (click)="clickEventNewPassword($event)"
+                          [attr.aria-label]="'Hide password'"
+                          [attr.aria-pressed]="hideNewPassword()"
+                        >
+                          <mat-icon>{{hideNewPassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                    </mat-form-field>
+
+                    @if (this.errorMessage != '') {
+                        <p class="warning">{{this.errorMessage}}</p>
+                    }
+                    @if (this.passwordChanged) {
+                        <p class="successful">Contraseña cambiada</p>
+                    }
+
+                    <div>
+                        <button mat-flat-button class="my-button" 
+                        [disabled]="this.password == '' || this.newPassword == ''" (click)="this.changePassword()">Change</button>
+                    </div>
+                </div>
+
+            </mat-card-content>
+        </mat-tab>
+    </mat-tab-group>
+</mat-card>

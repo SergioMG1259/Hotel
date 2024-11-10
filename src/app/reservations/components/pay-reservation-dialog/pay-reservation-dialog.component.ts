@@ -11,6 +11,11 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ServiceReservation } from '../../../servicesRoom/models/serviceReservation';
+import { ServicesRoomApiService } from '../../../services/services-room-api.service';
+import { Subscription } from 'rxjs';
+import { Reservation } from '../../models/reservation';
+import { PaymentsApiService } from '../../../services/payments-api.service';
+import { AddPayment } from '../../../payments/models/addPayment';
 
 @Component({
   selector: 'app-pay-reservation-dialog',
@@ -24,29 +29,62 @@ export class PayReservationDialogComponent {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
   displayedColumns: string[] = ['name', 'description', 'price']
-  dataSource = new MatTableDataSource<ServiceReservation>(ELEMENT_DATA)
+  dataSource = new MatTableDataSource<ServiceReservation>([])
+  
+  method:string = 'TARJETA'
+
+  getServicesSub!: Subscription
+  addPaymentSub!: Subscription
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { reservationId: number},
-    private dialogRef: MatDialogRef<PayReservationDialogComponent>) {
+    @Inject(MAT_DIALOG_DATA) public data: { reservation: Reservation},
+    private dialogRef: MatDialogRef<PayReservationDialogComponent>, private servicesRoomService : ServicesRoomApiService,
+    private paymentService: PaymentsApiService) {
 
   }
 
   onClose(): void {
-    this.dialogRef.close();  // Cierra el diálogo sin cambios
+    this.dialogRef.close();
+  }
+
+  onPay(): void {
+
+    const addPayment: AddPayment = {
+      reserva: {
+        id: this.data.reservation.id
+      },
+      metododepago: this.method
+    }
+
+    this.addPaymentSub = this.paymentService.createPayment(addPayment).subscribe(result => {
+      this.dialogRef.close({payment:addPayment})
+    })
   }
 
   getTotalPrice(): number {
-    return ELEMENT_DATA.reduce((total, element) => total + element.precio, 0);
+    return this.dataSource.data.reduce((total, element) => total + element.precio, 0);
+  }
+
+  ngOnInit(): void {
+    
+    if(this.getServicesSub)
+      this.getServicesSub.unsubscribe()
+
+    this.getServicesSub = this.servicesRoomService.getServicesByReservation(this.data.reservation.id).subscribe(result => {
+      this.dataSource.data = result
+    })
+
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator
   }
-}
 
-const ELEMENT_DATA: ServiceReservation[] = [
-  // {id: 1, name: 'servicio 1', description: 'descripción larga aqui 1', price: 15.2},
-  // {id: 2, name: 'servicio 2', description: 'descripción larga aqui 2', price: 12.3},
-  // {id: 3, name: 'servicio 3', description: 'descripción larga aqui 3', price: 13.7}
-]
+  ngOnDestroy(): void {
+    if(this.getServicesSub)
+      this.getServicesSub.unsubscribe()
+
+    if(this.addPaymentSub)
+      this.addPaymentSub.unsubscribe()
+  }
+}

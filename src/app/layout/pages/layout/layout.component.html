@@ -15,7 +15,7 @@
                 </a>
             </li>
 
-            @if (this.rol == 'admin') {
+            @if (this.rol == 'ADMIN') {
                 <li class="side-bar-item">
                     <a class="flex link" [routerLink]="['/services']" routerLinkActive="side-bar-active">
                         <div class="side-bar-option flex">
@@ -43,15 +43,25 @@
                     </div>
                 </a>
             </li>
+
+            <li class="side-bar-item">
+                <a class="flex link" [routerLink]="['/profile']" routerLinkActive="side-bar-active">
+                    <div class="side-bar-option flex">
+                        <mat-icon class="side-bar-icon">person</mat-icon>
+                        <p class="side-bar-item-name side-bar-nav-item">Profile</p>
+                    </div>
+                </a>
+            </li>
             
             <li class="side-bar-item aux">
-                <a class="flex link" [routerLink]="['/login']" routerLinkActive="side-bar-active">
+                <a class="flex link" [routerLink]="['/login']" routerLinkActive="side-bar-active" (click)="this.onLogOut()">
                     <div class="side-bar-option flex exit">
                         <mat-icon class="side-bar-icon">logout</mat-icon>
                         <p class="side-bar-item-name side-bar-nav-item">Exit</p>
                     </div>
                 </a>
             </li>
+
         </ul>
     </mat-drawer>
     <mat-drawer-content>

@@ -4,8 +4,8 @@
 
         <div class="flex wrapper">
             <div>
-                <h3 class="sub-title">Cost for room</h3>
-                <span>S/ 120</span>
+                <h3 class="sub-title">cost of booking the room</h3>
+                <span>S/ {{this.data.reservation.monto}}</span>
             </div>
 
             <div>
@@ -15,19 +15,19 @@
                       <!-- Name Column -->
                       <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef> Service name </th>
-                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
                       </ng-container>
                   
                       <!-- Description Column -->
                       <ng-container matColumnDef="description">
                         <th mat-header-cell *matHeaderCellDef> Description </th>
-                        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
                       </ng-container>
                   
                       <!-- Price Column -->
                       <ng-container matColumnDef="price">
                         <th mat-header-cell *matHeaderCellDef> Price </th>
-                        <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.precio}} </td>
                       </ng-container>          
                   
                       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -45,20 +45,20 @@
             <div>
                 <mat-form-field appearance="outline">
                     <mat-label>Payment method</mat-label>
-                    <mat-select>
-                        <mat-option value="CARD">Card</mat-option>
+                    <mat-select [(ngModel)]="this.method">
+                        <mat-option value="TARJETA">Card</mat-option>
                         <mat-option value="YAPE">Yape</mat-option>
-                        <mat-option value="CASH">Cash</mat-option>
+                        <mat-option value="EFECTIVO">Cash</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
 
-            <h3 class="total">Total price = S/ 161.2</h3>
+            <h3 class="total">Total price = S/ {{this.data.reservation.monto + getTotalPrice()}}</h3>
         </div>    
     </mat-card-content>
 
     <mat-dialog-actions >
         <button mat-button (click)="onClose()">Close</button>
-        <button mat-button (click)="onClose()">Pay</button>
+        <button mat-button (click)="onPay()">Pay</button>
     </mat-dialog-actions>
 </mat-card>

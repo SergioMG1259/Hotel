@@ -3,66 +3,66 @@
       <!-- Customer Column -->
       <ng-container matColumnDef="customer">
         <th mat-header-cell *matHeaderCellDef> Customer </th>
-        <td mat-cell *matCellDef="let element"> {{element.customerName}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.cliente.nombre + " " +element.cliente.apellido}} </td>
       </ng-container>
   
       <!-- Room Column -->
       <ng-container matColumnDef="room">
         <th mat-header-cell *matHeaderCellDef> Room </th>
-        <td mat-cell *matCellDef="let element"> {{element.roomNumber}}</td>
+        <td mat-cell *matCellDef="let element"> {{element.habitacion.numerohabitacion}}</td>
       </ng-container>
   
       <!-- Cost Column -->
       <ng-container matColumnDef="cost">
         <th mat-header-cell *matHeaderCellDef> Cost </th>
-        <td mat-cell *matCellDef="let element"> {{element.cost}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.monto}} </td>
       </ng-container>
 
         <!-- Start Column -->
         <ng-container matColumnDef="start">
             <th mat-header-cell *matHeaderCellDef> Start date </th>
-            <td mat-cell *matCellDef="let element"> {{element.startDate| date: 'mediumDate'}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.fechainicio| date: 'mediumDate'}} </td>
         </ng-container>
 
         <!-- Final Column -->
         <ng-container matColumnDef="final">
             <th mat-header-cell *matHeaderCellDef> Final date </th>
-            <td mat-cell *matCellDef="let element"> {{element.finalDate| date: 'mediumDate'}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.fechafin| date: 'mediumDate'}} </td>
         </ng-container>
 
         <!-- Status Column -->
         <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef> Status </th>
-            <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.estadoReserva}} </td>
         </ng-container>
 
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef aria-label="row actions">Actions</th>
         <td mat-cell *matCellDef="let element">
-            @if (this.authService.userRol == 'admin') {
+            @if (this.authService.customerRole == 'ADMIN') {
                 <button mat-flat-button aria-label="view details reservation" (click)="this.openViewServicesReservationDialog(element.id)">
                     View services
                 </button>
-                @if (element.status == 'CONFIRMED') {
-                    <button mat-flat-button aria-label="finish reservation" class="finish">
+                @if (element.estadoReserva == 'CONFIRMADA') {
+                    <button mat-flat-button aria-label="finish reservation" (click)="this.openEndReservationDialog(element.id)" class="finish">
                         Finish
                     </button>
                 }
 
-            } @else if (this.authService.userRol == 'customer') {
+            } @else if (this.authService.customerRole == 'USER') {
 
-                @if (element.status == 'RESERVED') {
-                    <button mat-flat-button aria-label="view details reservation" class="pay" (click)="this.openPayReservationDialog(element.id)">
+                @if (element.estadoReserva == 'RESERVADA') {
+                    <button mat-flat-button aria-label="view details reservation" class="pay" (click)="this.openPayReservationDialog(element)">
                         Pay
                     </button>
                     <button mat-button aria-label="view details reservation" (click)="this.openEditServicesReservationDialog(element.id)">
                         View services
                     </button>
-                    <button mat-button aria-label="cancel reservation" color="warn" class="cancel">
+                    <button mat-button aria-label="cancel reservation" color="warn" class="cancel" (click)="this.openCancelReservationDialog(element.id)">
                         Cancel
                     </button>
                 }
-                @if (element.status != 'RESERVED') {
+                @if (element.estadoReserva != 'RESERVADA') {
                     <button mat-flat-button aria-label="view details reservation" (click)="this.openViewServicesReservationDialog(element.id)">
                         View services
                     </button>

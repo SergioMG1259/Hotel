@@ -1,24 +1,34 @@
 <mat-card class="aux">
     <mat-card-content>
-        <h2 class="title">Pay reservation</h2>
+        <h2 class="title">Payment information</h2>
 
         <div class="flex wrapper">
             <div class="flex dates">
                 <div>
-                    <h3 class="sub-title">Start Date</h3>
-                    <span>10/30/2024</span>
+                    <h3 class="sub-title">Start reservation</h3>
+                    <span>{{this.payment.reserva.fechainicio| date: 'mediumDate'}}</span>
                 </div>
 
                 <div>
-                    <h3 class="sub-title">Final Date</h3>
-                    <span>10/31/2024</span>
+                    <h3 class="sub-title">Final reservation</h3>
+                    <span>{{this.payment.reserva.fechafin| date: 'mediumDate'}}</span>
                 </div>
             </div>
 
-            <div>
-                <h3 class="sub-title">Cost for room</h3>
-                <span>S/ 120</span>
+            <div class="flex dates">
+                <div>
+                    <h3 class="sub-title">Cost for room</h3>
+                    <span>{{'S/.'+ ' '+this.payment.reserva.habitacion.preciopornoche}}</span>
+                </div>
+
+                <div>
+                    <h3 class="sub-title">Cost Reservation</h3>
+                    <span>{{'S/.'+ ' '+this.payment.reserva.monto}}</span>
+                </div>
+
             </div>
+
+
 
             <div>
                 <h3 class="sub-title">Services</h3>
@@ -27,19 +37,19 @@
                       <!-- Name Column -->
                       <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef> Service name </th>
-                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
                       </ng-container>
                   
                       <!-- Description Column -->
                       <ng-container matColumnDef="description">
                         <th mat-header-cell *matHeaderCellDef> Description </th>
-                        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
                       </ng-container>
                   
                       <!-- Price Column -->
                       <ng-container matColumnDef="price">
                         <th mat-header-cell *matHeaderCellDef> Price </th>
-                        <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.precio}} </td>
                       </ng-container>          
                   
                       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -57,10 +67,10 @@
 
             <div>
                 <h3 class="sub-title">Payment method</h3>
-                <span>CARD</span>
+                <span>{{this.payment.metododepago}}</span>
             </div>
 
-            <h3 class="total">Total price = S/ 161.2</h3>
+            <h3 class="total">{{'Total price = S/ ' + this.payment.monto}}</h3>
         </div>    
     </mat-card-content>
 

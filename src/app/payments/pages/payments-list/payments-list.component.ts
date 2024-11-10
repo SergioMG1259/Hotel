@@ -13,6 +13,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Payment } from '../../models/payment';
 import { Subscription } from 'rxjs';
 import { PayDetailsDialogComponent } from '../../components/pay-details-dialog/pay-details-dialog.component';
+import { PaymentsApiService } from '../../../services/payments-api.service';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-payments-list',
@@ -25,16 +27,27 @@ import { PayDetailsDialogComponent } from '../../components/pay-details-dialog/p
 export class PaymentsListComponent {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
-  displayedColumns: string[] = ['reservation', 'total amount', 'start', 'final', 'payment date', 'method' ,'actions']
-  dataSource = new MatTableDataSource<Payment>(ELEMENT_DATA)
+  displayedColumns: string[] = []
+  dataSource = new MatTableDataSource<Payment>([])
 
   payDetailsDialogSub!: Subscription
 
-  constructor(private dialog: MatDialog) {}
+  allPaymentsSub!: Subscription
+  paymentsByCustomerSub!: Subscription
 
-  openPayDetailsDialog(paymentnId: number): void {
+  constructor(private dialog: MatDialog, public authService: AuthService, private paymentService: PaymentsApiService) {
+
+    if (this.authService.customerRole == 'ADMIN') {
+      this.displayedColumns = ['customer','room', 'total amount','start', 'final', 'payment date', 'method' ,'actions']
+    } else if (this.authService.customerRole == 'USER') {
+      this.displayedColumns = ['room', 'total amount','start', 'final', 'payment date', 'method' ,'actions']
+    }
+
+  }
+
+  openPayDetailsDialog(payment: Payment): void {
     const dialogRef = this.dialog.open(PayDetailsDialogComponent, {
-      data: { paymentnId }
+      data: { payment }
     })
     
     this.payDetailsDialogSub = dialogRef.afterClosed().subscribe(result => {
@@ -42,17 +55,40 @@ export class PaymentsListComponent {
     })
   }
 
+  getAllPayments(){
+
+    if(this.allPaymentsSub)
+      this.allPaymentsSub.unsubscribe()
+
+    this.allPaymentsSub = this.paymentService.getAllPagos().subscribe(result => {
+      this.dataSource.data = result
+    })
+  }
+
+  getPaymentsByCustomer() {
+
+    if(this.paymentsByCustomerSub)
+      this.paymentsByCustomerSub.unsubscribe()
+
+    this.paymentsByCustomerSub = this.paymentService.getPaymentsByCustomer(this.authService.customerId!).subscribe(result => {
+      this,this.dataSource.data = result
+    })
+  }
+
+  ngOnInit(): void {
+    if (this.authService.customerRole == 'ADMIN') {
+      this.getAllPayments()
+    } else if (this.authService.customerRole == 'USER') {
+      this.getPaymentsByCustomer()
+    }
+  }
+
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator
   }
-}
 
-const ELEMENT_DATA: Payment[] = [
-  {id: 1, reservation: 'room 1', totalAmount: 120, startDate: new Date(), finalDate: new Date(), paymentDate: new Date(), paymentMethod: 'CARD'},
-  {id: 1, reservation: 'room 2', totalAmount: 112, startDate: new Date(), finalDate: new Date(), paymentDate: new Date(), paymentMethod: 'CARD'},
-  {id: 1, reservation: 'room 3', totalAmount: 140, startDate: new Date(), finalDate: new Date(), paymentDate: new Date(), paymentMethod: 'CARD'},
-  {id: 1, reservation: 'room 4', totalAmount: 121, startDate: new Date(), finalDate: new Date(), paymentDate: new Date(), paymentMethod: 'CARD'},
-  {id: 1, reservation: 'room 5', totalAmount: 110, startDate: new Date(), finalDate: new Date(), paymentDate: new Date(), paymentMethod: 'CARD'},
-  {id: 1, reservation: 'room 6', totalAmount: 80, startDate: new Date(), finalDate: new Date(), paymentDate: new Date(), paymentMethod: 'CARD'},
-  {id: 1, reservation: 'room 7', totalAmount: 190, startDate: new Date(), finalDate: new Date(), paymentDate: new Date(), paymentMethod: 'CARD'}
-]
+  ngOnDestroy(): void {
+    if(this.allPaymentsSub)
+      this.allPaymentsSub.unsubscribe()
+  }
+}

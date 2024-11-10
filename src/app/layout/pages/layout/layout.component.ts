@@ -19,9 +19,11 @@ export class LayoutComponent {
   rol:string|null = null
 
   constructor(private authService: AuthService) {
-    this.rol = authService.userRol
+    this.rol = authService.customerRole
   }
 
-
+  onLogOut() {
+    this.authService.logout()
+  }
 
 }

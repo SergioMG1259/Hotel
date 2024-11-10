@@ -1,5 +1,5 @@
 <div class="flex wrapper">
-    <section class="flex left">
+    <form [formGroup]="form" class="flex left">
         <mat-card appearance="outlined" class="form-wrapper">
             <mat-card-header>
               <mat-card-title>Register</mat-card-title>
@@ -10,24 +10,24 @@
                     <div class="flex row">
                         <mat-form-field appearance="outline">
                             <mat-label>Names</mat-label>
-                            <input matInput placeholder="Names" type="text">
+                            <input matInput placeholder="Names" type="text" formControlName="nombre">
                         </mat-form-field>
         
                         <mat-form-field appearance="outline">
                             <mat-label>Last Names</mat-label>
-                            <input matInput placeholder="Last Names" type="text">
+                            <input matInput placeholder="Last Names" type="text" formControlName="apellido">
                         </mat-form-field>
                     </div>
     
                     <div class="flex row">
                         <mat-form-field appearance="outline">
                             <mat-label>DNI</mat-label>
-                            <input matInput placeholder="" type="text">
+                            <input matInput placeholder="" type="text" formControlName="dni_ce" maxlength="8">
                         </mat-form-field>
     
                         <mat-form-field appearance="outline">
                             <mat-label>Nationality</mat-label>
-                            <mat-select>
+                            <mat-select formControlName="nacionalidad">
                               @for (country of nationalities; track country) {
                                 <mat-option [value]="country.country">{{country.country}}</mat-option>
                               }
@@ -38,25 +38,25 @@
                     <div class="flex row">
                         <mat-form-field appearance="outline">
                             <mat-label>Birthday</mat-label>
-                            <input matInput [matDatepicker]="picker" placeholder="MM/DD/YYYY">
+                            <input matInput [matDatepicker]="picker" placeholder="MM/DD/YYYY" formControlName="fecha_de_nacimiento">
                             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                           </mat-form-field>
     
                           <mat-form-field appearance="outline">
                             <mat-label>Cellphone</mat-label>
-                            <input matInput placeholder="981236527" type="text">
+                            <input matInput placeholder="981236527" type="text" formControlName="telefono" maxlength="9">
                         </mat-form-field>
                     </div>
     
                     <mat-form-field appearance="outline">
                         <mat-label>Email</mat-label>
-                        <input matInput placeholder="example@example.com" type="email">
+                        <input matInput placeholder="example@example.com" type="email" formControlName="email">
                     </mat-form-field>
     
                     <mat-form-field appearance="outline">
                         <mat-label>Password</mat-label>
-                        <input matInput [type]="hide() ? 'password' : 'text'" />
+                        <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password"/>
                         <button
                           mat-icon-button
                           matSuffix
@@ -70,25 +70,29 @@
     
                     <mat-form-field appearance="outline">
                         <mat-label>Role</mat-label>
-                        <mat-select>
+                        <mat-select formControlName="role">
                           @for (rol of roles; track rol) {
                             <mat-option [value]="rol.value">{{rol.value}}</mat-option>
                           }
                         </mat-select>
                     </mat-form-field>
+
+                    @if (this.errorMessage != '') {
+                        <p class="warning">{{this.errorMessage}}</p>
+                    }
                 </div>
 
             </mat-card-content>
 
             <mat-card-actions>
-                <button mat-flat-button class="my-button">Register</button>
+                <button mat-flat-button class="my-button" [disabled]="form.invalid" (click)="this.register()">Register</button>
             </mat-card-actions>
 
             <mat-card-actions>
                 <p class="to-login">Have an account? <a href="/login">Log in here.</a></p>
             </mat-card-actions>
         </mat-card>
-    </section>
+    </form>
 
     <section class="flex right">
         <div class="text-content">

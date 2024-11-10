@@ -1,7 +1,7 @@
 export interface ServiceEditableReservation {
     id: number,
-    name: string,
-    description: string,
-    price: number,
+    nombre: string,
+    descripcion: string,
+    precio: number,
     selected: boolean
 }

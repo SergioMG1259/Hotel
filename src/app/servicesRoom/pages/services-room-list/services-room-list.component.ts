@@ -79,10 +79,6 @@ export class ServicesRoomListComponent {
     });
   }
 
-  updateService(service : any) {
-    console.log(service)
-  }
-
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator
   }

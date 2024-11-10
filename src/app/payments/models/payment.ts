@@ -1,9 +1,9 @@
+import { Reservation } from "../../reservations/models/reservation";
+
 export interface Payment {
     id: number,
-    reservation: string,
-    totalAmount: number,
-    startDate: Date,
-    finalDate: Date,
-    paymentDate: Date,
-    paymentMethod: string
+    fechapago: Date,
+    monto: number,
+    metododepago:string,
+    reserva: Reservation
 }

@@ -1,0 +1,13 @@
+/* .mat-mdc-dialog-surface {
+    padding: 10px !important;
+} */
+.title {
+    color: var(--primary-text);
+    font-size: 20px;
+}
+.description {
+    color: var(--grey);
+    font-size: 16px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}

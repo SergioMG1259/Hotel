@@ -96,24 +96,9 @@ export class RoomsListComponent implements OnDestroy {
   
     this.addReservationDialogSub = dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          console.log(result.room)
-          //aqui ya no sería result, sino los datos para la reserva
+          this.applyFilters()
         }  
     })
-  }
-
-  deleteRoom(index: number): void {
-    console.log(`Deleting item at index ${index}...`)
-    // Simula la eliminación llamando a un endpoint (sólo un console log en este caso)
-    console.log('Updated items:', index)
-  }
-
-  addRoom(room : any) {
-    console.log(room)
-  }
-
-  updateRoom(room : any) {
-    console.log(room)
   }
 
   ngAfterViewInit() {

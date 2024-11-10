@@ -16,6 +16,9 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { ViewServicesReservationDialogComponent } from '../../components/view-services-reservation-dialog/view-services-reservation-dialog.component';
 import { EditServicesReservationDialogComponent } from '../../components/edit-services-reservation-dialog/edit-services-reservation-dialog.component';
 import { PayReservationDialogComponent } from '../../components/pay-reservation-dialog/pay-reservation-dialog.component';
+import { ReservationsApiService } from '../../../services/reservations-api.service';
+import { CancelDialogComponent } from '../../components/cancel-dialog/cancel-dialog.component';
+import { EndDialogComponent } from '../../components/end-dialog/end-dialog.component';
 
 @Component({
   selector: 'app-reservations-list',
@@ -29,17 +32,21 @@ export class ReservationsListComponent {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator
   displayedColumns: string[] = []
-  dataSource = new MatTableDataSource<Reservation>(ELEMENT_DATA)
+  dataSource = new MatTableDataSource<Reservation>([]);
+  reservations: Reservation[] = []
 
   viewServicseReservationDialogSub!: Subscription
   editServicseReservationDialogSub!: Subscription
   payReservationDialogSub!: Subscription
+  allReservationServiceSub!: Subscription
+  reservationsByCustomerSub!: Subscription
+  cancelReservationSub!: Subscription
 
-  constructor(private dialog: MatDialog, public authService: AuthService) {
+  constructor(private dialog: MatDialog, public authService: AuthService, private reservationService: ReservationsApiService) {
 
-    if (this.authService.userRol == 'admin') {
+    if (this.authService.customerRole == 'ADMIN') {
       this.displayedColumns = ['customer', 'room', 'cost', 'start', 'final', 'status' ,'actions']
-    } else if (this.authService.userRol == 'customer') {
+    } else if (this.authService.customerRole == 'USER') {
       this.displayedColumns = ['room', 'cost', 'start', 'final', 'status' ,'actions']
     }
     
@@ -47,28 +54,85 @@ export class ReservationsListComponent {
 
   openViewServicesReservationDialog(reservationId: number): void {
     const dialogRef = this.dialog.open(ViewServicesReservationDialogComponent, {
-      data: { reservationId }  // Se pasa el modo y los datos de la habitación (solo en modo 'edit')
+      data: { reservationId }
     });
   }
 
+  //para añadir o quitar servicios a la reserva
   openEditServicesReservationDialog(reservationId: number): void {
     const dialogRef = this.dialog.open(EditServicesReservationDialogComponent, {
       data: { reservationId }
     })
-    
-    this.editServicseReservationDialogSub = dialogRef.afterClosed().subscribe(result => {
-
-    })
   }
 
-  openPayReservationDialog(reservationId: number): void {
+  openPayReservationDialog(reservation: Reservation): void {
     const dialogRef = this.dialog.open(PayReservationDialogComponent, {
-      data: { reservationId }
+      data: { reservation }
     })
     
     this.payReservationDialogSub = dialogRef.afterClosed().subscribe(result => {
-      
+      if(result) {
+        this.getReservationsByRol()
+      }
     })
+  }
+
+  openCancelReservationDialog(reservationId: number) {
+    const dialogRef = this.dialog.open(CancelDialogComponent, {
+      data: { reservationId }
+    })
+
+    this.cancelReservationSub = dialogRef.afterClosed().subscribe(result => {
+      if(result && result.canceled == true) {
+        this.getReservationsByRol()
+      }
+    })
+  }
+
+  openEndReservationDialog(reservationId: number) {
+    const dialogRef = this.dialog.open(EndDialogComponent, {
+      data: { reservationId }
+    })
+
+    this.cancelReservationSub = dialogRef.afterClosed().subscribe(result => {
+      if(result && result.finalized == true) {
+        this.getReservationsByRol()
+      }
+    })
+  }
+
+  getAllReservations() {
+
+    if(this.allReservationServiceSub)
+      this.allReservationServiceSub.unsubscribe()
+
+    this.allReservationServiceSub = this.reservationService.getAllReservations().subscribe((result) => {
+      this.reservations = result
+      this.dataSource.data  = this.reservations
+    })
+  }
+
+  getReservationsByCustomer() {
+    if(this.reservationsByCustomerSub)
+      this.reservationsByCustomerSub.unsubscribe()
+
+    this.reservationsByCustomerSub = this.reservationService.getReservationsByCustomer(this.authService.customerId!)
+      .subscribe(result => {
+      this.reservations = result
+      this.dataSource.data  = this.reservations
+    })
+  }
+
+  getReservationsByRol() {
+    if (this.authService.customerRole == 'ADMIN') {
+      this.getAllReservations()
+    } else if (this.authService.customerRole == 'USER') {
+      this.getReservationsByCustomer()
+    }
+  }
+
+  ngOnInit(): void {
+    this.getReservationsByRol()
   }
 
   ngAfterViewInit() {
@@ -78,18 +142,21 @@ export class ReservationsListComponent {
   ngOnDestroy(): void {
     if (this.viewServicseReservationDialogSub)
       this.viewServicseReservationDialogSub.unsubscribe()
+
     if (this.editServicseReservationDialogSub)
       this.editServicseReservationDialogSub.unsubscribe()
+
     if (this.payReservationDialogSub)
       this.payReservationDialogSub.unsubscribe()
+
+    if(this.allReservationServiceSub)
+      this.allReservationServiceSub.unsubscribe()
+
+    if(this.reservationsByCustomerSub)
+      this.reservationsByCustomerSub.unsubscribe()
+
+    if(this.cancelReservationSub)
+      this.cancelReservationSub.unsubscribe()
   }
 
 }
-
-const ELEMENT_DATA: Reservation[] = [
-  {id: 1, customerName: 'nombre 1', roomNumber: 'room 1', status: 'CONFIRMED' ,cost: 35.2, startDate: new Date(), finalDate: new Date(), services: []},
-  {id: 2, customerName: 'nombre 2', roomNumber: 'room 2', status: 'RESERVED' , cost: 22.3, startDate: new Date(), finalDate: new Date(), services: []},
-  {id: 3, customerName: 'nombre 3', roomNumber: 'room 3', status: 'RESERVED' , cost: 43.7, startDate: new Date(), finalDate: new Date(), services: []},
-  {id: 4, customerName: 'nombre 4', roomNumber: 'room 4', status: 'RESERVED' , cost: 21.2, startDate: new Date(), finalDate: new Date(), services: []},
-  {id: 5, customerName: 'nombre 5', roomNumber: 'room 5', status: 'RESERVED' , cost: 77.1, startDate: new Date(), finalDate: new Date(), services: []},
-]

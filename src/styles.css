@@ -24,6 +24,7 @@ body { background-color: var(--background-color); margin: 0; font-family: Roboto
     --primary-color: rgb(246, 246, 246);
     --secondary-color: rgb(38, 116, 243);
     --delete-color: #ed2061;
+    --successful-color:#0cb63f;
     --grey: #6a6a6a;
 }
 .mat-mdc-card{
